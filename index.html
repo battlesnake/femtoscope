@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+  <!-- Thanks, ChatGPT -->
+  <head>
+    <meta charset="UTF-8">
+    <title>Sine Wave Generator</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+
+		<form class="functional-unit">
+
+			<h1>Signal Generator</h1>
+
+			<section class="control">
+				<label for="generator-sink">
+					<span>Sink / output</span>
+				</label>
+				<select id="generator-sink">
+				</select>
+			</section>
+
+			<section class="control">
+				<label for="generator-enabled">
+					<span>Enabled</span>
+				</label>
+				<input type="checkbox" id="generator-enabled">
+			</section>
+
+			<section class="control">
+				<label for="generator-frequency">
+					<span>Frequency (Hz)</span>
+				</label>
+				<input type="text" id="generator-frequency" value="440">
+				<span>Hz</span>
+			</section>
+
+			<section class="control">
+				<label for="generator-level">
+					<span>Level</span>
+				</label>
+				<input type="range" id="generator-level" min="-180" max="0" step="1" value="0">
+				<span id="generator-level-label">dB</span>
+			</section>
+
+			<section class="control">
+				<label for="generator-shape">
+					<span>Shape</span>
+				</label>
+				<select id="generator-shape">
+					<option value="sine">Sine</option>
+					<option value="square">Square</option>
+					<option value="triangle">Triangle</option>
+					<option value="sawtooth">Sawtooth</option>
+				</select>
+			</section>
+
+		</form>
+
+		<form class="functional-unit">
+
+			<h1>Signal Analyser</h1>
+
+			<section class="control">
+				<label for="analyser-source">
+					<span>Source / input</span>
+				</label>
+				<select id="analyser-source">
+				</select>
+			</section>
+
+			<section class="control">
+				<label for="analyser-enabled">
+					<span>Enabled</span>
+				</label>
+				<input type="checkbox" id="analyser-enabled">
+			</section>
+
+			<section class="control">
+				<label for="analyser-frame-rate">
+					<span>Frame rate</span>
+				</label>
+				<input type="range" id="analyser-frame-rate" min="5" max="60" step="5" value="30">
+				<span id="analyser-frame-rate-label">Hz</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-ymin">
+					<span>Vertical range (min)</span>
+				</label>
+				<input type="range" id="analyser-ymin" min="-180" max="0" step="10" value="-120">
+				<span id="analyser-ymin-label">dB</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-ymax">
+					<span>Vertical range (max)</span>
+				</label>
+				<input type="range" id="analyser-ymax" min="-180" max="0" step="10" value="0">
+				<span id="analyser-ymax-label">dB</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-log-frequency">
+					<span>Logarithmic frequency scale</span>
+				</label>
+				<input type="checkbox" id="analyser-log-frequency" checked>
+			</section>
+
+			<section class="control">
+				<label for="analyser-frequency">
+					<span>Frequency</span>
+				</label>
+				<input type="text" id="analyser-frequency" disabled>
+				<span>Hz</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-level">
+					<span>Level</span>
+				</label>
+				<input type="text" id="analyser-level" disabled>
+				<span>dB</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-thd">
+					<span>Total harmonic distortion<br>and noise</span>
+				</label>
+				<input type="text" id="analyser-thd" disabled> <span>dB</span>
+			</section>
+
+			<section class="control">
+				<label for="analyser-scope">
+					<span>Scope</span>
+				</label>
+				<div class="screen">
+					<canvas id="analyser-scope" width="1200" height="300"></canvas>
+					<span class="corner-ne" id="analyser-scope-ne"></span>
+					<span class="corner-nw" id="analyser-scope-nw"></span>
+					<span class="corner-se" id="analyser-scope-se"></span>
+					<span class="corner-sw" id="analyser-scope-sw"></span>
+				</div>
+			</section>
+
+			<section class="control">
+				<label for="analyser-spectrum">
+					<span>Spectrum</span>
+				</label>
+				<div class="screen">
+					<canvas id="analyser-spectrum" width="1200" height="300"></canvas>
+					<span class="corner-ne" id="analyser-spectrum-ne"></span>
+					<span class="corner-nw" id="analyser-spectrum-nw"></span>
+					<span class="corner-se" id="analyser-spectrum-se"></span>
+					<span class="corner-sw" id="analyser-spectrum-sw"></span>
+				</div>
+			</section>
+
+		</form>
+
+		<script src="script.js">
+		</script>
+
+	</body>
+	</html>

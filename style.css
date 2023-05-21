@@ -1,0 +1,70 @@
+body {
+	background: #444;
+	color: #ddd;
+	font-family: 'Droid Sans', 'Roboto', 'Open Sans', sans-serif;
+	font-weight: 500;
+}
+.functional-unit {
+	margin: 1em;
+	border: 1px solid #222;
+	border-radius: 1em;
+	padding: 1em;
+	overflow: hidden;
+	display: inline-table;
+	border-spacing: 0 1em; 
+}
+.control {
+	display: table-row;
+	margin: 1em 0;
+}
+.control>* {
+	display: table-cell;
+	vertical-align: top;
+	text-align: left;
+}
+.control>label:first-child {
+	flex: 0 0 250px;
+	font-weight: bold;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #666;
+	border-left: 1px solid #666;
+	padding: 0.25em;
+	padding-right: 1em;
+}
+input, select {
+	background: #666;
+	color: white;
+	border: 1px solid #222;
+	border-top-right-radius: 0.5em;
+	border-bottom-right-radius: 0.5em;
+	padding: 0.5em;
+}
+input[disabled] {
+	font-style: italic;
+}
+.screen {
+	position: relative;
+}
+.screen>.corner-ne {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.screen>.corner-se {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+}
+.screen>.corner-nw {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.screen>.corner-sw {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+}
+canvas {
+	border: 1px solid #222;
+}
