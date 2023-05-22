@@ -1,3 +1,88 @@
+const example_model = {
+	next_serial: 1,
+	source_channels: [
+		{
+			device: 'A device',
+			index: 0,
+			serial: 100,
+			marked: false,
+			mapped: false
+		}
+	],
+	units: [
+		{
+			type: 'analyser',
+			name: 'Analyser',
+			serial: 200,
+			mapping: {
+				description: 'potato'
+			},
+			parameters: [
+				{
+					name: 'Slider',
+					view: 'slider',
+					serial: 300,
+					min: -10,
+					max: 10,
+					step: 2,
+					value: 4
+				},
+				{
+					name: 'Switch',
+					view: 'switch',
+					serial: 400,
+					value: false
+				}
+			]
+		}
+	]
+};
+
+
+(() => {
+	const app = angular.module('femtoscope', []);
+	app.controller("main_controller", function ($scope) {
+		Object.assign($scope, example_model);
+		const create_serial = () => {
+			return "m" + $scope.next_serial++;
+		};
+		$scope.marked_channels = () => $scope.source_channels.filter(channel => channel.marked && !channel.mapped);
+		$scope.create_analyser = () => {
+			const ports = $scope.marked_channels();
+			if (ports.length === 0) {
+				return;
+			}
+			for (const port of ports) {
+				port.marked = false;
+				port.mapped = true;
+			}
+			$scope.units.push({
+				type: 'analyser',
+				name: 'Analyser',
+				serial: create_serial(),
+				mapping: {
+					ports: ports,
+					description: ports.map(port => `{port.device} : #${port.index}`).join(", ")
+				},
+				parametersr: [
+					{
+						name: 'Switch',
+						view: 'switch',
+						serial: 400,
+						value: false
+					}
+				]
+			});
+		};
+	});
+})();
+
+
+
+
+
+(() => {
+
 const SAMPLE_RATE = 96000;
 const FFT_SIZE = 16384;
 
@@ -455,3 +540,5 @@ function bind_ui() {
 
 bind_ui();
 update_device_lists().catch(on_async_error);
+
+});
