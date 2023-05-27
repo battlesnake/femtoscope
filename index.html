@@ -9,48 +9,25 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular-csp.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 		<link rel="stylesheet" href="style.css" />
 	</head>
-	<body ng-app="femtoscope" ng-cloak ng-controller="main_controller" data-bs-theme="dark">
+	<body ng-app="femtoscope" ng-cloak ng-controller="main" data-bs-theme="dark">
 
 		<div class="accordion">
 
 			<form class="accordion-item">
 
 				<h2 class="accordion-header">
-					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_sources">
-						Sources
+					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accordion_channels">
+						Functional units
 					</button>
 				</h2>
 
-				<div class="accordion-collapse collapse show" id="accordion_sources">
-					<table class="accordion-body">
-						<caption>Sources</caption>
-						<thead>
-							<tr>
-								<td>Device</td>
-								<td>Channel</td>
-								<td>Map</td>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="channel in source_channels track by channel.serial">
-								<td><label ng-bind="channel.device" ng-attr-for="{{channel.serial}}"></label></td>
-								<td><label ng-bind="channel.index" ng-attr-for="{{channel.serial}}"></label></td>
-								<td>
-									<div class="form-check form-switch">
-										<input class="form-check-input" ng-attr-id="{{channel.serial}}" type="checkbox" role="switch" ng-model="channel.marked" ng-disabled="channel.mapped" ng-hide="channel.mapped" />
-									</div>
-								</td>
-							</tr>
-						</tbody>
-						<tfoot>
-							<tr>
-								<td><span>Create</span></td>
-								<td colspan="2">
-									<button class="btn btn-primary" ng-click="create_analyser()" ng-disabled="marked_channels().length === 0">Analyser</button>
-								</td>
-							</tr>
-						</tfoot>
-					</table>
+				<div class="accordion-collapse collapse show" id="accordion_channels">
+					<div class="accordion-body">
+						<div class="d-flex flex-wrap">
+							<channel-mapping class="m-3" title="Sources" channels="source_channels" unit-types="sink_unit_types" on-create="map_channels_to_new_unit" type="sources"></channel-mapping>
+							<channel-mapping class="m-3" title="Sinks" channels="sink_channels" unit-types="source_unit_types" on-create="map_channels_to_new_unit" type="sinks"></channel-mapping>
+						</div>
+					</div>
 				</div>
 
 			</form>
@@ -63,32 +40,11 @@
 				</h2>
 
 				<div class="accordion-collapse collapse show" ng-attr-id="{{'accordion_' + unit.serial}}">
-					<table ng-class="unit.type">
-						<caption><span ng-bind="unit.name">&nbsp;<span ng-bind="unit.mapping.description"></caption>
-						<tbody>
-							<tr ng-repeat="parameter in unit.parameters track by parameter.serial">
-								<td class="control-label">
-									<label class="form-label" ng-bind="parameter.name" ng-attr-for="{{parameter.serial}}"></label>
-								</td>
-								<td class="control-interface" ng-switch="parameter.view">
-									<div class="form-check form-switch" ng-switch-when="switch">
-										<input class="form-check-input" ng-attr-id="{{parameter.serial}}" type="checkbox" role="switch" ng-model="parameter.value" ng-disabled="parameter.readonly" />
-									</div>
-									<input class="form-range" ng-attr-id="{{parameter.serial}}" ng-switch-when="slider" type="range" ng-attr-min="{{parameter.min}}" ng-attr-max="{{parameter.max}}" ng-attr-step="{{parameter.step}}" ng-model="parameter.value" ng-disabled="parameter.readonly" />
-									<input class="form-control" ng-attr-id="{{parameter.serial}}" ng-switch-when="spinner" type="number" ng-attr-min="{{parameter.min}}" ng-attr-max="{{parameter.max}}" ng-attr-step="{{parameter.step}}" ng-model="parameter.value" ng-disabled="parameter.readonly" />
-									<select class="form-select" ng-attr-id="{{parameter.serial}}" ng-switch-when="choice" ng-options="choice.value as choice.label for choice in parameter.choices" ng-model="parameter.value" ng-disabled="parameter.readonly"></select>
-									<canvas ng-attr-id="{{parameter.serial}}" ng-switch-when="visual"></canvas>
-									<div class="alert alert-danger" ng-switch-default>Unsupported view type: {{parameter.view}}</div>
-								</td>
-								<td class="control-unit" ng-switch="parameter.view">
-									<span ng-switch-when="slider" ng-bind="parameter.value + ' ' + parameter.unit"></span>
-									<span ng-switch-default ng-bind="parameter.unit"></span>
-								</td>
-								<td class="control-spacer"></td>
-							</tr>
-						</tbody>
-						<tfoot></tfoot>
-					</table>
+					<div class="container-fluid p-3">
+						<div class="row">
+							<field-set ng-repeat="field_group in unit.interface" fields="field_group" values="unit.values" class="col-12 col-lg-6"></field-set>
+						</div>
+					</div>
 				</div>
 
 			</form>
@@ -99,8 +55,13 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-		<script src="script.js">
-		</script>
+		<script src="app.js"></script>
+		<script src="main.js"></script>
+		<script src="channel-mapping.js"></script>
+		<script src="field-set.js"></script>
+		<script src="field.js"></script>
+		<script src="generator.js"></script>
+		<script src="analyser.js"></script>
 
 	</body>
 </html>

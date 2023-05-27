@@ -1,0 +1,15 @@
+<div ng-controller="fieldSet" class="container-fluid">
+	<div ng-repeat="field in fields" ng-switch="field.view" class="row">
+		<h3 ng-switch-when="section" ng-bind="field.title"></h3>
+		<div ng-switch-default class="col-6 col-lg-5 col-xl-4 col-xxl-3">
+			<label ng-attr-for="{{field.serial}}" ng-bind="field.title"></label>
+		</div>
+		<div ng-switch-default class="col-4 col-lg-5 col-xl-6 col-xxl-7">
+			<field definition="field" values="values"></field>
+		</div>
+		<div ng-switch-default class="col-2 col-lg-1" ng-switch="field.view">
+			<span ng-switch-when="slider" ng-bind="values[field.name] + ' ' + field.unit"></span>
+			<span ng-switch-default ng-bind="field.unit"></span>
+		</div>
+	</div>
+</div>

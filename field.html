@@ -1,0 +1,12 @@
+<div ng-controller="field">
+	<div ng-switch="definition.view">
+		<input class="form-control" ng-attr-id="{{serial}}" ng-switch-when="text" type="text" ng-model="values[definition.name]" ng-disabled="is_disabled()" />
+		<div class="form-check form-switch" ng-switch-when="switch">
+			<input class="form-check-input" ng-attr-id="{{serial}}" type="checkbox" role="switch" ng-model="values[definition.name]" ng-disabled="is_disabled()" />
+		</div>
+		<input class="form-range" ng-attr-id="{{serial}}" ng-switch-when="slider" type="range" ng-attr-min="{{definition.min}}" ng-attr-max="{{definition.max}}" ng-attr-step="{{definition.step}}" ng-model="values[definition.name]" ng-disabled="is_disabled()" />
+		<input class="form-control" ng-attr-id="{{serial}}" ng-switch-when="spinner" type="number" ng-attr-min="{{definition.min}}" ng-attr-max="{{definition.max}}" ng-attr-step="{{definition.step}}" ng-model="values[definition.name]" ng-disabled="is_disabled()" />
+		<select class="form-select" ng-attr-id="{{serial}}" ng-switch-when="choice" ng-options="choice.value as choice.label for choice in definition.choices" ng-model="values[definition.name]" ng-disabled="is_disabled()"></select>
+		<canvas ng-attr-id="{{serial}}" ng-switch-when="visual" ng-init="visual_width=600; visual_height=400;" ng-attr-width="visual_width" ng-attr-height="visual_height" ng-style="{ width: visual_width, height: visual_height }"></canvas>
+	</div>
+</div>

@@ -1,0 +1,31 @@
+<div class="card">
+	<div class="card-header" ng-bind="title">
+	</div>
+	<div class="card-body">
+		<table class="accordion-body" ng-controller="channelMapping">
+			<thead>
+				<tr>
+					<td class="pe-3">Device</td>
+					<td class="px-3">Channel</td>
+					<td class="px-3">Map</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="channel in channels track by channel.serial">
+					<td class="px-3 fst-italic"><label ng-bind="channel.device" ng-attr-for="{{channel.serial}}"></label></td>
+					<td class="px-3 text-end fst-italic"><label ng-bind="channel.index" ng-attr-for="{{channel.serial}}"></label></td>
+					<td class="px-3">
+						<div class="form-check form-switch">
+							<input class="form-check-input" ng-attr-id="{{channel.serial}}" type="checkbox" role="switch" ng-model="channel.selected" ng-disabled="channel.mapped" ng-hide="channel.mapped" />
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="card-footer">
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-primary" ng-repeat="unit_type in unit_types" ng-click="on_create(unit_type, selected_channels())" ng-disabled="!can_create(unit_type)" ng-bind="unit_type.title"></button>
+		</div>
+	</div>
+</div>
