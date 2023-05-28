@@ -39,94 +39,71 @@
 			}
 		};
 	});
-	app.factory("demoModel", function (analyserInterface, generatorInterface) {
-		return {
-			channels: [
-				{
-					type: 'source',
-					device: 'Mic',
-					index: 0,
-				},
-				{
-					type: 'source',
-					device: 'Mic',
-					index: 1,
-				},
-				{
-					type: 'source',
-					device: 'Other mic',
-					index: 0,
-				},
-				{
-					type: 'source',
-					device: 'Yet another mic',
-					index: 0,
-				},
-				{
-					type: 'sink',
-					device: 'Speakers',
-					index: 0,
-				},
-				{
-					type: 'sink',
-					device: 'Speakers',
-					index: 1,
-				},
-				{
-					type: 'sink',
-					device: 'Headphones',
-					index: 0,
-				},
-				{
-					type: 'sink',
-					device: 'Headphones',
-					index: 1,
-				},
-			],
-			unit_types: [
-				generatorInterface,
-				analyserInterface,
-			],
-			units: [
-			],
-			////
-			validate: (channels) => {
-				if (channels.length !== 2) {
-					throw new Error("Two channels required");
-				}
-				return true;
+	app.constant("demoModel", {
+		channels: [
+			{
+				type: 'source',
+				device: 'Mic',
+				index: 0,
 			},
-			selected_channels: [],
-		};
+			{
+				type: 'source',
+				device: 'Mic',
+				index: 1,
+			},
+			{
+				type: 'source',
+				device: 'Other mic',
+				index: 0,
+			},
+			{
+				type: 'source',
+				device: 'Yet another mic',
+				index: 0,
+			},
+			{
+				type: 'sink',
+				device: 'Speakers',
+				index: 0,
+			},
+			{
+				type: 'sink',
+				device: 'Speakers',
+				index: 1,
+			},
+			{
+				type: 'sink',
+				device: 'Headphones',
+				index: 0,
+			},
+			{
+				type: 'sink',
+				device: 'Headphones',
+				index: 1,
+			},
+		],
+		unit_types: [
+			{
+				name: 'analyser',
+				title: 'Analyser',
+			},
+			{
+				name: 'generator',
+				title: 'Generator',
+			},
+		],
+		units: [
+		],
 	});
-	app.factory("unitGenerator", function (serialGenerator) {
-		return function (unit_interface) {
-			return {
-				serial: serialGenerator.next(),
-				type: unit_interface.type,
-				title: unit_interface.title,
-				channels: [],
-				interface: unit_interface.interface.map(
-					column => column.map(
-						({ value, ...properties }) =>
-						({ ...properties, serial: serialGenerator.next() })
-					)
-				),
-				values: unit_interface.interface.flat()
-					.map(({ name, value }) => ({ name, value }))
-					.reduce((values, { name, value }) => {
-						values[name] = value;
-						return values;
-					}, {}),
-			};
-			return unit;
-		};
-	});
-	app.controller("main", function ($scope, demoModel, analyserInterface, generatorInterface, unitGenerator) {
+	app.controller("main", function ($scope, demoModel, serialGenerator) {
 		Object.assign($scope, demoModel);
 		Object.assign($scope, {
 			add_functional_unit: (unit_type) => {
-				$scope.units.push(unitGenerator(unit_type));
+				$scope.units.push({
+					serial: serialGenerator.next(),
+					type: unit_type.name,
+					title: unit_type.title,
+				});
 			},
 		});
 	});

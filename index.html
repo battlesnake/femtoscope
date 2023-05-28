@@ -24,40 +24,12 @@
 					</button>
 					<ul class="dropdown-menu">
 						<li>
-							<button class="dropdown-item" ng-repeat="unit_type in unit_types track by unit_type.type" ng-bind="unit_type.title" ng-click="add_functional_unit(unit_type)"></button>
+							<button class="dropdown-item" ng-repeat="unit_type in unit_types track by unit_type.name" ng-bind="unit_type.title" ng-click="add_functional_unit(unit_type)"></button>
 						</li>
 					</ul>
 				</div>
 
-				<div class="nav-item dropdown">
-					<button class="btn btn-link nav-link py-2 px-0 px-lg-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme">
-						<i class="bi bi-moon-stars-fill my-1 theme-icon-active"></i>
-						<span class="d-lg-none ms-2" id="bd-theme-text">Toggle theme</span>
-					</button>
-					<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="bd-theme-text">
-						<li>
-							<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false">
-								<i class="bi bi-sun-fill me-2 opacity-50 theme-icon" data-icon="bi-sun-fill"></i>
-								Light
-								<i class="bi bi-check2 ms-auto d-none"></i>
-							</button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark" aria-pressed="true">
-								<i class="bi bi-moon-stars-fill me-2 opacity-50 theme-icon" data-icon="bi-moon-stars-fill"></i>
-								Dark
-								<i class="bi bi-check2 ms-auto d-none"></i>
-							</button>
-						</li>
-						<li>
-							<button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto" aria-pressed="false">
-								<i class="bi bi-circle-half me-2 opacity-50 theme-icon" data-icon="bi-circle-half"></i>
-								Auto
-								<i class="bi bi-check2 ms-auto d-none"></i>
-							</button>
-						</li>
-					</ul>
-				</div>
+				<bootstrap-theme-selector />
 
 			</div>
 		</nav>
@@ -74,12 +46,8 @@
 
 				<div class="accordion-collapse collapse show" ng-attr-id="{{'accordion_' + unit.serial}}">
 					<div class="container-fluid p-3">
-						<div class="row">
-							<field-set ng-repeat="field_group in unit.interface track by $index" fields="field_group" values="unit.values" class="col-12 col-lg-6"></field-set>
-						</div>
-
-<channel-select title="Channel select" type="source" channels="channels" validate="validate" selection="selected_channels"></channel-select>
-
+						<analyser ng-if="unit.type === 'analyser'" channels="channels" class="row"></analyser>
+						<generator ng-if="unit.type === 'generator'" channels="channels" class="row"></generator>
 					</div>
 				</div>
 
@@ -91,11 +59,13 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha3/js/bootstrap.bundle.js" integrity="sha512-21i5e7C9dImLFoN36RDhshA0pMFvL5/oRHtuJQTjk2pdmk2uiX4bttWbMNt3UVsfSMCbRKb1+5BI1KGOWeatiw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js" integrity="sha512-2iwCHjuj+PmdCyvb88rMOch0UcKQxVHi/gsAml1fN3eg82IDaO/cdzzeXX4iF2VzIIes7pODE1/G0ts3QBwslA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.js" integrity="sha512-klc+qN5PPscoGxSzFpetVsCr9sryi2e2vHwZKq43FdFyhSAa7vAqog/Ifl8tzg/8mBZiG2MAKhyjH5oPJp65EA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.js" integrity="sha512-c2T3C9cjX/WQscZb+Qws0CqbPujwNik3JPOzn4r/PwHDYdIVxC+LXOY51+4qAsR2wutl7iC0at47X1EIroFq5A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-		<script src="theme.js"></script>
 		<script src="app.js"></script>
 		<script src="no-cache.js"></script>
 		<script src="bootstrap.js"></script>
+		<script src="bootstrap-theme-selector.js"></script>
+		<script src="bootstrap-dropdown.js"></script>
 		<script src="main.js"></script>
 		<script src="channel-select.js"></script>
 		<script src="field-set.js"></script>

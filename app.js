@@ -1,3 +1,3 @@
 (() => {
-	const app = angular.module('femtoscope', []);
+	const app = angular.module('femtoscope', ['ngStorage']);
 })();

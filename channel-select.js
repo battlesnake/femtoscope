@@ -21,11 +21,19 @@
 				.map(channel_id)
 				.map(id => [id, true])
 				.fromPairs()
-				.value()
+				.value();
 		const get_model_value = view_value => _($scope.channels)
 				.orderBy(['device', 'index'])
 				.filter(channel => view_value[channel_id(channel)])
-				.value()
+				.value();
+		const update_validation = () => {
+			$scope.validation_error = null;
+			try {
+				$scope.validate(get_model_value($scope.view_value));
+			} catch (err) {
+				$scope.validation_error = err.message;
+			}
+		};
 		const initialise = () => {
 			$scope.view_value = get_view_value(model($scope));
 		};
@@ -36,10 +44,9 @@
 		let visible = false;
 		Object.assign($scope, {
 			channel_id,
-			initialise,
 			apply,
 			validation_error: null,
-			view_vlue: {},
+			view_value: {},
 		});
 		$scope.$on("bootstrapDropdown", (event, name, command) => {
 			if (name !== "channel-select") {
@@ -55,15 +62,7 @@
 			}
 		});
 		$scope.$watch("view_value", () => {
-			if (!visible) {
-				return;
-			}
-			$scope.validation_error = null;
-			try {
-				$scope.validate(get_model_value($scope.view_value));
-			} catch (err) {
-				$scope.validation_error = err.message;
-			}
+			update_validation();
 		}, true);
 	});
 	app.directive("channelSelect", function () {

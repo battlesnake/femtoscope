@@ -1,17 +1,38 @@
 (() => {
 	const app = angular.module('femtoscope');
-	app.factory("analyserInterface", function (templateLevelField, templateFrequencyField) {
+	app.controller("analyser", function ($scope, analyserSpecification) {
+		$scope.interface = analyserSpecification.interface;
+		$scope.validate_channels = (channels) => {
+			if (channels.length === 0) {
+				throw new Error("No channels selected");
+			}
+			if (channels.length > 4) {
+				throw new Error("Too many channels selected");
+			}
+		};
+		$scope.config = analyserSpecification.interface
+			.flat()
+			.map(({ name, value }) => ({ name, value }))
+			.reduce((values, { name, value }) => {
+				values[name] = value;
+				return values;
+			}, { channels: [] });
+	});
+	app.directive("analyser", function () {
+		return {
+			controller: 'analyser',
+			restrict: 'E',
+			templateUrl: 'analyser.html',
+			replace: true,
+			scope: {
+				channels: '=channels',
+			},
+		};
+	});
+	app.factory("analyserSpecification", function (templateLevelField, templateFrequencyField) {
 		return {
 			type: "analyser",
 			title: "Analyser",
-			inputs: {
-				min: 1,
-				max: 4,
-			},
-			outputs: {
-				min: 0,
-				max: 0,
-			},
 			interface: [
 				[
 					{

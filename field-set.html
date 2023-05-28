@@ -1,5 +1,5 @@
 <div class="container-fluid">
-	<div ng-repeat="field in fields" ng-switch="field.view" class="row">
+	<div ng-repeat="field in fields" ng-switch="field.view" class="row p-1">
 		<h3 ng-switch-when="section" ng-bind="field.title"></h3>
 		<div ng-switch-default class="col-6 col-lg-5 col-xl-4 col-xxl-3" ng-class="{ 'border-bottom border-secondary-subtle': !$last, 'align-text-middle': field.view !== 'visual', 'align-text-top': field.view === 'visual' }">
 			<label ng-attr-for="{{field.serial}}" ng-bind="field.title"></label>

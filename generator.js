@@ -1,17 +1,38 @@
 (() => {
 	const app = angular.module('femtoscope');
-	app.factory("generatorInterface", function (templateLevelField, templateFrequencyField) {
+	app.controller("generator", function ($scope, generatorSpecification) {
+		$scope.interface = generatorSpecification.interface;
+		$scope.validate_channels = (channels) => {
+			if (channels.length === 0) {
+				throw new Error("No channels selected");
+			}
+			if (channels.length > 4) {
+				throw new Error("Too many channels selected");
+			}
+		};
+		$scope.config = generatorSpecification.interface
+			.flat()
+			.map(({ name, value }) => ({ name, value }))
+			.reduce((values, { name, value }) => {
+				values[name] = value;
+				return values;
+			}, { channels: [] });
+	});
+	app.directive("generator", function () {
+		return {
+			controller: 'generator',
+			restrict: 'E',
+			templateUrl: 'generator.html',
+			replace: true,
+			scope: {
+				channels: '=channels',
+			},
+		};
+	});
+	app.factory("generatorSpecification", function (templateLevelField, templateFrequencyField) {
 		return {
 			type: "generator",
 			title: "Generator",
-			inputs: {
-				min: 0,
-				max: 0,
-			},
-			outputs: {
-				min: 1,
-				max: 8,
-			},
 			interface: [
 				[
 					{

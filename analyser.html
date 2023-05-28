@@ -1,0 +1,4 @@
+<div>
+	<field-set ng-repeat="field_group in interface track by $index" fields="field_group" values="config" class="col-12 col-lg-6"></field-set>
+	<channel-select title="Channel select" type="source" channels="channels" validate="validate_channels" selection="config.channels"></channel-select>
+</div>
