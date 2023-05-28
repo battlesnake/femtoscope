@@ -1,0 +1,26 @@
+<form class="dropdown">
+	<button bootstrap-dropdown="channel-select" type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+		Channel select
+	</button>
+	<ul class="dropdown-menu dropdown-menu-start">
+		<li ng-repeat-start="channel_group in channels | channelAggregate:type track by channel_group[0].device">
+			<h6 class="dropdown-header" ng-bind="channel_group[0].device"></h6>
+		</li>
+		<li ng-repeat="channel in channel_group track by channel.index">
+			<label class="dropdown-item">
+				<div class="form-check">
+					<input class="form-check-input" type="checkbox" ng-model="view_value[channel_id(channel)]" />
+					<span class="form-check-label" ng-bind="channel.index"></span>
+				</div>
+			</label>
+		</li>
+		<li ng-repeat-end>
+			<hr class="dropdown-divider" />
+		</li>
+		<li ng-if="validation_error" class="alert alert-warning" role="alert" ng-bind="validation_error">
+		</li>
+		<li ng-if="!validation_error">
+			<a class="dropdown-item" href="javascript://" ng-click="apply()">Apply</a>
+		</li>
+	</ul>
+</form>

@@ -19,70 +19,98 @@
 		let next_serial = 1;
 		this.next = () => "M" + next_serial++;
 	});
-	app.factory("demoModel", function (serialGenerator) {
+	app.directive('numericModel', function() {
 		return {
-			source_channels: [
+			restrict: 'A',
+			require: 'ngModel',
+			link: function(scope, element, attrs, ngModel) {
+				ngModel.$parsers.push(function(val) {
+					ngModel.$setValidity('number', false, ngModel);
+					try {
+						return parseInt(val, 10);
+					} catch (err) {
+						return undefined;
+					}
+					ngModel.$setValidity('number', true, ngModel);
+				});
+				ngModel.$formatters.push(function(val) {
+					return String(val);
+				});
+			}
+		};
+	});
+	app.factory("demoModel", function (analyserInterface, generatorInterface) {
+		return {
+			channels: [
 				{
+					type: 'source',
 					device: 'Mic',
 					index: 0,
-					serial: serialGenerator.next(),
-					selected: false,
-					mapped: false
 				},
 				{
+					type: 'source',
 					device: 'Mic',
 					index: 1,
-					serial: serialGenerator.next(),
-					selected: false,
-					mapped: false
 				},
-			],
-			sink_channels: [
 				{
+					type: 'source',
+					device: 'Other mic',
+					index: 0,
+				},
+				{
+					type: 'source',
+					device: 'Yet another mic',
+					index: 0,
+				},
+				{
+					type: 'sink',
 					device: 'Speakers',
 					index: 0,
-					serial: serialGenerator.next(),
-					selected: false,
-					mapped: false
 				},
 				{
+					type: 'sink',
 					device: 'Speakers',
 					index: 1,
-					serial: serialGenerator.next(),
-					selected: false,
-					mapped: false
+				},
+				{
+					type: 'sink',
+					device: 'Headphones',
+					index: 0,
+				},
+				{
+					type: 'sink',
+					device: 'Headphones',
+					index: 1,
 				},
 			],
-			source_unit_types: [
-				{
-					title: "Generator",
-					type: "generator",
-				},
-			],
-			sink_unit_types: [
-				{
-					title: "Analyser",
-					type: "analyser",
-				},
+			unit_types: [
+				generatorInterface,
+				analyserInterface,
 			],
 			units: [
-			]
+			],
+			////
+			validate: (channels) => {
+				if (channels.length !== 2) {
+					throw new Error("Two channels required");
+				}
+				return true;
+			},
+			selected_channels: [],
 		};
 	});
 	app.factory("unitGenerator", function (serialGenerator) {
-		return function (channels, unit_interface) {
-			for (const channel of channels) {
-				channel.selected = false;
-				channel.mapped = true;
-			}
+		return function (unit_interface) {
 			return {
 				serial: serialGenerator.next(),
 				type: unit_interface.type,
 				title: unit_interface.title,
-				channels: [...channels],
+				channels: [],
 				interface: unit_interface.interface.map(
-					({ value, ...properties }) =>
-					({ ...properties, serial: serialGenerator.next() })
+					column => column.map(
+						({ value, ...properties }) =>
+						({ ...properties, serial: serialGenerator.next() })
+					)
 				),
 				values: unit_interface.interface.flat()
 					.map(({ name, value }) => ({ name, value }))
@@ -97,14 +125,8 @@
 	app.controller("main", function ($scope, demoModel, analyserInterface, generatorInterface, unitGenerator) {
 		Object.assign($scope, demoModel);
 		Object.assign($scope, {
-			map_channels_to_new_unit: (type, channels) => {
-				if (type.type === "analyser") {
-					$scope.units.push(unitGenerator(channels, analyserInterface));
-				} else if (type.type === "generator") {
-					$scope.units.push(unitGenerator(channels, generatorInterface));
-				} else {
-					throw new Error(`Invalid unit-type: ${type.type}`);
-				}
+			add_functional_unit: (unit_type) => {
+				$scope.units.push(unitGenerator(unit_type));
 			},
 		});
 	});

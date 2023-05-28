@@ -10,6 +10,7 @@
 		return {
 			controller: "field",
 			restrict: "E",
+			replace: true,
 			templateUrl: "field.html",
 			scope: {
 				definition: "=definition",
